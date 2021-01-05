@@ -1,0 +1,382 @@
+openapi: 3.0.0
+info:
+  title: Vacation managing system api
+  description: An api to helpe managing employee's vacations
+  version: 1.0
+servers:
+  - url: /api
+
+paths:
+
+  /employees:
+    parameters:
+      - name: first_name
+        description: first_name
+        in: query
+        schema:
+          type: string
+      - name: last_name
+        description: last_name
+        in: query
+        schema:
+          type: string
+      - name: address
+        description: address
+        in: query
+        schema:
+          type: string
+      - name: postcode
+        description: postcode
+        in: query
+        schema:
+          type: string
+          format: int64
+      - name: email
+        description: email
+        in: query
+        schema:
+          type: string
+          format: email
+      - name: phone
+        description: phone
+        in: query
+        schema:
+          type: string
+          pattern: ^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$
+    get:
+      tags:
+        - Employee
+      summary: Returns a list of employee.
+      description: Returns a list of employee.
+      operationId: employees_get_list
+      x-openapi-router-controller: vms.api.employee
+
+      responses:
+        '200':    # status code
+          description: A JSON array of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+    post:
+      tags:
+        - Employee
+      summary: Create employee.
+      description: Create employee.
+      operationId: employees_post
+      x-openapi-router-controller: vms.api.employee
+      responses:
+        '200': # status code
+          description: A JSON object of the created employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /employee/{id}:
+    parameters:
+      - name: id
+        description: id
+        required: true
+        in: path
+        schema:
+          type: integer
+    get:
+      tags:
+        - Employee
+      summary: Get employee by id.
+      description: Get employee by id.
+      operationId: employee_get_by_id
+      x-openapi-router-controller: vms.api.employee
+      responses:
+        '200': # status code
+          description: A JSON object of the updated employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+    patch:
+      tags:
+        - Employee
+      summary: update employee.
+      description: Update employee.
+      operationId: employee_patch
+      x-openapi-router-controller: vms.api.employee
+      parameters:
+        - name: first_name
+          description: first_name
+          in: query
+          schema:
+            type: string
+        - name: last_name
+          description: last_name
+          in: query
+          schema:
+            type: string
+        - name: address
+          description: address
+          in: query
+          schema:
+            type: string
+        - name: postcode
+          description: postcode
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: email
+          description: email
+          in: query
+          schema:
+            type: string
+            format: email
+        - name: phone
+          description: phone
+          in: query
+          schema:
+            type: string
+            pattern: ^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$
+      responses:
+        '200': # status code
+          description: A JSON object of the updated employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+    delete:
+      tags:
+        - Employee
+      summary: delete employee by id.
+      description: delete employee by id.
+      operationId: employee_delete
+      x-openapi-router-controller: vms.api.employee
+      responses:
+        '200': # status code
+          description: A JSON object of the updated employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+
+  /vacations:
+    get:
+      tags:
+        - Vacation
+      summary: Returns a list of vacation.
+      description: Returns a list of vacation.
+      operationId: vacations_get_list
+      x-openapi-router-controller: vms.api.vacation
+      parameters:
+        - name: start_date
+          description: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+            example: 2020-01-01
+        - name: end_date
+          description: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+            example: 2020-12-31
+        - name: type
+          description: type
+          in: query
+          schema:
+            type: string
+            enum:
+              - 'NORMAL'
+              - 'UNPAID'
+              - 'RTT'
+        - name: employee_id
+          description: employee_id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        '200': # status code
+          description: A JSON array of vacations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vacation'
+    post:
+      tags:
+        - Vacation
+      summary: Create vacation.
+      description: Create vacation.
+      operationId: vacations_post
+      x-openapi-router-controller: vms.api.vacation
+      parameters:
+        - name: start_date
+          description: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2020-01-01
+        - name: end_date
+          description: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2020-12-31
+        - name: type
+          description: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'NORMAL'
+              - 'UNPAID'
+              - 'RTT'
+        - name: employee_id
+          description: employee_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200': # status code
+          description: A JSON array of vacations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacation'
+        '400': # Bad Request
+          description: Bad Request
+  /vacation/{id}:
+    parameters:
+      - name: id
+        description: id
+        required: true
+        in: path
+        schema:
+          type: integer
+    get:
+      tags:
+        - Vacation
+      summary: Get vacation by id.
+      description: Get vacation by id.
+      operationId: vacation_get_by_id
+      x-openapi-router-controller: vms.api.vacation
+      responses:
+        '200': # status code
+          description: Employee deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacation'
+    patch:
+      tags:
+        - Vacation
+      summary: update vacation.
+      description: Update vacation.
+      operationId: vacation_patch
+      x-openapi-router-controller: vms.api.vacation
+      parameters:
+        - name: start_date
+          description: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2020-01-01
+        - name: end_date
+          description: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2020-01-02
+        - name: type
+          description: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'NORMAL'
+              - 'UNPAID'
+              - 'RTT'
+        - name: employee_id
+          description: employee_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200': # status code
+          description: A JSON object of the updated vacation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacation'
+    delete:
+      tags:
+        - Vacation
+      summary: delete vacation by id.
+      description: delete vacation by id.
+      operationId: vacation_delete
+      x-openapi-router-controller: vms.api.vacation
+      responses:
+        '200': # status code
+          description: Vacation deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacation'
+
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        address:
+          type: string
+        postcode:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+    Vacation:
+      type: object
+      properties:
+        id:
+          type: integer
+        start_date:
+          type: string
+        end_date:
+          type: string
+        type:
+          type: string
+        employee_id:
+          type: string

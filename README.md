@@ -57,3 +57,11 @@ Your answer to this test should be a repository. Please refrain from forking thi
 
 Feel free to implement this project in whatever way you feel like, we do not impose any limitations/requirements.
 You can choose any framework (or no framework), any design pattern (or none), any database (or none) for this.
+
+``
+## Getting Started
+
+* First start by creating a environment with the requirements from requirements.txt file.
+* Then run the create-db script to create a initialize the database and populate it with some fake data.
+* Set the FLASK_APP environment variable with the name of the app
+* Run the flask app with the command `flask run`
