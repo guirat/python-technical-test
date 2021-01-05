@@ -1,7 +1,6 @@
-from config import db, session
+from config import db
 from vms.core.session import get_all
 from vms.model.employee import Employee, EmployeeSchema
-from sqlalchemy.sql import text
 
 from vms.model.vacation import Vacation
 
@@ -47,7 +46,6 @@ def employee_delete(id):
     result = Employee.query.filter_by(id=id).delete()
     if result:
         employee_vacations_list.delete()
-    # db.session.query(Employee).filter(Employee.id == id).delete()
     employee_schema = EmployeeSchema()
     data = employee_schema.dump(employee)
     db.session.commit()

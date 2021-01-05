@@ -13,7 +13,9 @@ class Employee(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     phone = db.Column(db.String(50), nullable=False, unique=True)
 
-    vacations = db.relationship('Vacation', backref='employee', cascade='all, delete, delete-orphan', passive_deletes=True)
+    vacations = db.relationship('Vacation', backref='employee',
+                                cascade='all, delete, delete-orphan',
+                                passive_deletes=True)
 
 
 class EmployeeSchema(ma.SQLAlchemyAutoSchema):

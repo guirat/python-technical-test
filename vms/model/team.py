@@ -1,10 +1,11 @@
 from config import db
-from vms.model.employee import Employee
 
 team_employee = db.Table('team_employee',
-                         db.Column('team_id', db.Integer, db.ForeignKey('team.id'), primary_key=True),
-                         db.Column('employee_id', db.Integer, db.ForeignKey('employee.id'), primary_key=True)
-                         )
+                         db.Column('team_id', db.Integer,
+                                   db.ForeignKey('team.id'), primary_key=True),
+                         db.Column('employee_id', db.Integer,
+                                   db.ForeignKey('employee.id'),
+                                   primary_key=True))
 
 
 class Team(db.Model):

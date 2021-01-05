@@ -8,7 +8,8 @@ class Vacation(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     type = db.Column(db.String(50), nullable=False)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id', ondelete='CASCADE'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id',
+                                                      ondelete='CASCADE'))
 
 
 class VacationSchema(ma.SQLAlchemyAutoSchema):
